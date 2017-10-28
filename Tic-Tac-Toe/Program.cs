@@ -20,8 +20,11 @@ namespace Tic_Tac_Toe
                 Console.WriteLine("Do you want to play again? y/n: ");
                 playagain = Console.ReadKey().KeyChar;
             }
-            
+            /*
+            int a = (int)'a';
+            Console.WriteLine(a);
             Console.ReadLine();
+            */
         }
     }
 }
