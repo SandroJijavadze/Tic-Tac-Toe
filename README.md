@@ -1,4 +1,3 @@
-# Tic-Tac-Toe
 <h1>Tic-Tac-Toe</h1>
 2 player, command-line, auto-play from .txt  file.
 
@@ -16,6 +15,11 @@ P2: B2</br>
 P1: C2</br>
 P2: A1</br>
 P1: C1</br>
-0000000000</br>
+0000000000</br></br>
 
+NOTE: "0000000000" this denotes end of the game.</br>
 
+In case of playing in game.txt mode, the games are output in json array representation as such:</br>
+[[1,0,2],[1,1,2],[2,0,1]]</br>
+[[0,0,0],[0,0,0],[2,1,2]]</br> 
+</br>Each line is the last state of board before winning or ending using "0000000000"</br>
