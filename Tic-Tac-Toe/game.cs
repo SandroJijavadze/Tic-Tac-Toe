@@ -19,11 +19,13 @@ namespace Tic_Tac_Toe
         private bool won = false;
         private int inp;      // status of input.
         private bool player1; // Which player is playing right now.
-        private string line;
-        private bool firstmove;
-        // IF file exists, the file will be assigned, else, it will be nulled.
+        private string line; // Current line in file.
+        private bool firstmove; // If current move is the first one, it is true, else false.
+        // IF file exists, the file will be assigned, else, file object reference will be null.
         private System.IO.StreamReader file = File.Exists(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\")) + "game.txt") ? new System.IO.StreamReader(@Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\")) + "game.txt") : null;
-        private bool makeMove(int a, int b) // a = row, b = column, c = player( either 1 or 2). returns -1 if move is illegal.
+
+        // a = row, b = column, c = player( either 1 or 2). returns -1 if move is illegal.
+        private bool makeMove(int a, int b)
         {
             int c = player1 ? 1 : 2;
             if (board[a, b] == 0)
@@ -33,10 +35,9 @@ namespace Tic_Tac_Toe
             }
             return false;
         }
-
+        //Takes string "A1" or similar as input. Returns true if move was successful, false if it failed.
         private bool move(string plmove)
-        {
-            
+        {           
             int row;
             if (plmove[0] == 'A')
                 row = 0;
@@ -52,7 +53,8 @@ namespace Tic_Tac_Toe
             else
                 return true;
         }
-        private int checkHorizontals()  //Checks if there is horizontal win, if there is, it returns row. else, returns -1.
+        //Checks if there is horizontal win, if there is, it returns row. else, returns -1.
+        private int checkHorizontals() 
         {
             for (int i = 0; i < 3; i++)
                 if (board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2] && board[i, 0] != 0)
@@ -60,7 +62,7 @@ namespace Tic_Tac_Toe
             return -1; // If there's no win, return -1.
 
         }
-
+        // If there is vertical win, returns the column, else returns -1;
         private int checkVerticals()
         {
             for (int i = 0; i < 3; i++)
@@ -69,6 +71,7 @@ namespace Tic_Tac_Toe
             return -1; // If there's no win, return -1.
         }
 
+        // If there is a diagonal win, returns 1, else -1;
         private bool checkDiagonals() // Returns 1 if there is a diagonal win. Returns -1 otherwise.
         {
             if (board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2] && board[0, 0] != 0)
@@ -77,8 +80,8 @@ namespace Tic_Tac_Toe
                 return true;
             return false;
         }
-
-        private int checkWin() // Returns player number , 1 or 2, or -1 if nobody wins.
+        // Checks if there is a win, returns winner number(1,2), or -1 if there is no winner.
+        private int checkWin() 
         {
             if (checkHorizontals() != -1)
                 return board[checkHorizontals(), 0];
@@ -89,34 +92,38 @@ namespace Tic_Tac_Toe
             return -1;
         }
 
+        // Plain display.
         private void displayBoard()
         {
             for (int i = 0; i < 3; i++)
                 Console.WriteLine($"{board[i, 0]} {board[i, 1]} {board[i, 2]}");
         }
 
+        // Checks 00000000, null or if there is a win. If true is returned, game will be finished.
         private bool act()
         {
             if (inp == -1) // IF null reached.
             {
-                if (won)
+                if (won) // If won, output the board and return true.
                 {
                     displayBoard();
                     won = false;
                     return true;
                 }
-                displayBoard(); //Display the board.
+                displayBoard(); //Display the board. Change it with json output.
                 return true;
             }
-            else if (inp == 0)
+            else if (inp == 0) // If 00000000 reached, zero the board and return false.
             {
                 displayBoard(); // Change it with json output.
                 board = new int[3, 3];
                 return false;
             }
-            return false;
+            return false; // Else
         }
 
+        // Reads input until the legal input is taken. When input is legal
+        // If it is first move, it initializes the 1st player, as it is not set in the beginning.
         private string getInput()
         {
             line = file.ReadLine();
@@ -131,7 +138,7 @@ namespace Tic_Tac_Toe
                 line = file.ReadLine();
                 if (line == null) // If end of file reached
                     return "null";
-                if (firstmove)
+                if (firstmove) // If the move is first one in this game, initialize player.
                 {
                     player1 = ((int)char.GetNumericValue(line[1]) == 1) ? true : false;
                     firstmove = false;
@@ -145,7 +152,8 @@ namespace Tic_Tac_Toe
             return line.Substring(4, 2);
 
         }
-        private int makeSenseOfInput()
+        // While move is not possible, gets new input. After the move, it flips the player.
+        private int makeSenseOfInput() 
         {
             string input;
             do
@@ -165,22 +173,22 @@ namespace Tic_Tac_Toe
             player1 = !player1;
             return 1;
         }
-
-        private bool firstMove() // Returns true if end reached.
+        // Returns true if end reached. So that caller can finish the game. Else, makes move.
+        private bool firstMove()
         {
             if (makeSenseOfInput() == 0) // IF 000000 reached
             {
                 if (skipMoves()) return true; // Skip moves and return NULL if end reached.
             }
             // determine who is first player.
-            //line = file.ReadLine();
             player1 = ((int)char.GetNumericValue(line[1]) == 1) ? true : false; 
             // Make Move;
             move(line.Substring(4, 2));
             player1 = !player1;
             return false;
         }
-        // If won or 0000000 reached, skip to the end of file or 
+        // This function is called after a win or 000000, so that unnecessary moves are skipped,
+        //if this returns true, caller aborts the game(null reached)
         private bool skipMoves() {
             do
             {
@@ -190,42 +198,46 @@ namespace Tic_Tac_Toe
             } while (line != "0000000000");
             return false;
         }
-        
+        // Reinitialize the board to zeroes, skip moves, and make first move.
+        // Returns true if either skipMoves or firstMove returns true, so that game can be aborted.
         private bool reInit()
         {
             displayBoard();
             board = new int[3, 3];
-            if (skipMoves()) return true;
-            if (firstMove()) return true;
-            return false;
+            return skipMoves() || firstMove();
         }
-        private bool playFromTextFile()
+
+        // Loop for game.txt
+        // While there still are games, play.
+        // If there are no more games, return to the caller.
+        private void playFromTextFile()
         {
             firstmove = true;
-            if (firstMove()) return true;
+            if (firstMove()) return;
             won = false;
             while (true) // This is the game loop.
             {
-                // Take input, if game is finished, return
-                do
+                do// Take input, act,  if game is finished, return to caller.
                 {
                     inp = makeSenseOfInput(); // Returns move if it is legal.
                     if (act())                // If game is finished. Return.
-                        return true;
+                        return;
                 } while (inp != 1);
 
                 if (inp == 0) // if 00000000 reached
                 {
-                    if (reInit()) return true;
+                    if (reInit()) return;
                 }
                 else if (checkWin() > -1)  // In case either player wins.
                 {
                     won = true;
-                    if (reInit()) return true;
+                    if (reInit()) return;
                 }
             }
         }
-
+        // Loop for 2 player game.
+        // This one was easier of two,
+        // Needs less error checking ( end of file, legal input, etc.)
         public void twoPlayerLoop()
         {
             Random r = new Random();
@@ -252,10 +264,14 @@ namespace Tic_Tac_Toe
                     break;
                 }
                 player1 = !player1;
-
             }
 
         }
+
+        /// <summary>
+        /// Loop for game, 
+        /// 2 modes. 2player and .txt file. User chooses either.
+        /// </summary>
         public void gameLoop()
         {
             char gamemode;
@@ -275,7 +291,7 @@ namespace Tic_Tac_Toe
                     Console.WriteLine("please place game.txt (not game.txt.txt) in the folder with .cs files\n");
                 }
             }
-            else //  This is 2 player case.
+            else                // 2 player case.
             {
                 twoPlayerLoop();
             }                
