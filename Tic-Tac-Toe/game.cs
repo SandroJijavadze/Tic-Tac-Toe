@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
 /// <summary>
 /// Sandro Jijavadze - 819819553
 /// The game class for tic tac toe.
@@ -21,6 +22,7 @@ namespace Tic_Tac_Toe
         private bool player1; // Which player is playing right now.
         private string line; // Current line in file.
         private bool firstmove; // If current move is the first one, it is true, else false.
+        private string json = "";
         // IF file exists, the file will be assigned, else, file object reference will be null.
         private System.IO.StreamReader file = File.Exists(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\")) + "game.txt") ? new System.IO.StreamReader(@Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\")) + "game.txt") : null;
 
@@ -28,6 +30,14 @@ namespace Tic_Tac_Toe
         private bool makeMove(int a, int b)
         {
             int c = player1 ? 1 : 2;
+            /*if (firstmove)
+            {
+                if (c == 1)
+                    c = 2;
+                else
+                    c = 1;
+            }*/
+                
             if (board[a, b] == 0)
             {
                 board[a, b] = c;
@@ -107,15 +117,18 @@ namespace Tic_Tac_Toe
                 if (won) // If won, output the board and return true.
                 {
                     displayBoard();
+                    //json += JsonConvert.SerializeObject(board);
                     won = false;
                     return true;
                 }
                 displayBoard(); //Display the board. Change it with json output.
+                //json += JsonConvert.SerializeObject(board);
                 return true;
             }
             else if (inp == 0) // If 00000000 reached, zero the board and return false.
             {
                 displayBoard(); // Change it with json output.
+                //json += JsonConvert.SerializeObject(board);
                 board = new int[3, 3];
                 return false;
             }
@@ -203,6 +216,7 @@ namespace Tic_Tac_Toe
         private bool reInit()
         {
             displayBoard();
+            //json += JsonConvert.SerializeObject(board);
             board = new int[3, 3];
             return skipMoves() || firstMove();
         }
@@ -284,6 +298,7 @@ namespace Tic_Tac_Toe
                 if (file != null)  
                 {
                     playFromTextFile();
+                    Console.Write(json);
                     board = new int[3, 3];
                 }
                 else
