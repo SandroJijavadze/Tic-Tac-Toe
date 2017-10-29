@@ -30,13 +30,15 @@ namespace Tic_Tac_Toe
         private bool makeMove(int a, int b)
         {
             int c = player1 ? 1 : 2;
-            /*if (firstmove)
+            if (firstmove)
             {
                 if (c == 1)
                     c = 2;
                 else
                     c = 1;
-            }*/
+
+                firstmove = false;
+            }
                 
             if (board[a, b] == 0)
             {
@@ -116,19 +118,20 @@ namespace Tic_Tac_Toe
             {
                 if (won) // If won, output the board and return true.
                 {
-                    displayBoard();
-                    //json += JsonConvert.SerializeObject(board);
+                    //displayBoard();
+                    json += JsonConvert.SerializeObject(board) + "\n";
+                    
                     won = false;
                     return true;
                 }
-                displayBoard(); //Display the board. Change it with json output.
-                //json += JsonConvert.SerializeObject(board);
+                //displayBoard(); //Display the board. Change it with json output.
+                json += JsonConvert.SerializeObject(board)+ "\n";
                 return true;
             }
             else if (inp == 0) // If 00000000 reached, zero the board and return false.
             {
-                displayBoard(); // Change it with json output.
-                //json += JsonConvert.SerializeObject(board);
+                //displayBoard(); // Change it with json output.
+                json += JsonConvert.SerializeObject(board)+"\n";
                 board = new int[3, 3];
                 return false;
             }
@@ -215,8 +218,7 @@ namespace Tic_Tac_Toe
         // Returns true if either skipMoves or firstMove returns true, so that game can be aborted.
         private bool reInit()
         {
-            displayBoard();
-            //json += JsonConvert.SerializeObject(board);
+            json += JsonConvert.SerializeObject(board)+"\n";
             board = new int[3, 3];
             return skipMoves() || firstMove();
         }
