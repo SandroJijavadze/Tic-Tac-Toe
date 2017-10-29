@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 /// <summary>
 /// Sandro Jijavadze - 819819553
 /// The game class for tic tac toe.
-/// Members: board,
+/// 
 /// </summary>
 
 namespace Tic_Tac_Toe
