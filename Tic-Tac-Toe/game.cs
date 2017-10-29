@@ -192,9 +192,14 @@ namespace Tic_Tac_Toe
         // Returns true if end reached. So that caller can finish the game. Else, makes move.
         private bool firstMove()
         {
-            if (makeSenseOfInput() == 0) // IF 000000 reached
+            int inputState = makeSenseOfInput();
+            if (inputState == -1) // IF 000000 reached
             {
-                if (skipMoves()) return true; // Skip moves and return NULL if end reached.
+                return true;
+                 // Skip moves and return NULL if end reached.
+            }else if(inputState == 0)
+            {
+                if (skipMoves()) return true; // If skipMoves reaches null, return true, abort game.
             }
             // determine who is first player.
             player1 = ((int)char.GetNumericValue(line[1]) == 1) ? true : false; 

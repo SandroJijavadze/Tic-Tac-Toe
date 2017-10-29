@@ -17,7 +17,8 @@ namespace Tic_Tac_Toe
             {
                 game = new Game();
                 game.gameLoop();
-                Console.WriteLine("Do you want to play again? y/n: ");
+                Console.WriteLine("\n\nEither game finished or file has invalid input.");
+                Console.WriteLine("Do you want to try again? y/n: ");
                 playagain = Console.ReadKey().KeyChar;
             }
             /*
