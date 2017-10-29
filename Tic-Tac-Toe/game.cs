@@ -155,10 +155,11 @@ namespace Tic_Tac_Toe
                         do
                         {
                             inp = makeSenseOfInput(ref file, ref player1);
-                            if (inp == -1)
+                            if (inp == -1) // IF null reached.
                             {
                                 if (won)
                                 {
+                                    displayBoard();
                                     won = false;
                                     goto finish;
                                 }
