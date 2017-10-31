@@ -8,6 +8,11 @@ Letters are rows (A => 0, B => 1, C=> 2), digits are columns.</br></br>
 <b>game.txt</b> </br>
 This is for professor to test the tic-tac-toe code using custom input moves for player 1 and 2.</br>
 For it to work, place game.txt in the directory with .cs files. </br>
+
+While there is no game.txt, the program will ask user if he wants to try playing again.</br>
+
+It will ask again, if player wants 2 player mode or .txt file.
+
 Format of input moves:</br>
 
 P1: B1</br>
